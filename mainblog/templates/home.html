@@ -2,12 +2,19 @@
 {% block content %}
     {% for post in posts %}
         <article class="media content-section">
+        <img class="rounder-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
           <div class="media-body">
             <div class="article-metadata">
-              <a class="mr-2" href="#">{{ post.author }}</a>
-              <small class="text-muted">{{ post.date_posted }}</small>
+              <a class="mr-2" href="#">
+                  {% if not post.author.firstname and not post.author.lastname %}
+                            {{post.author.email}}
+                  {% else %}
+                            {{post.author.firstname}} {{post.author.lastname}}
+                  {% endif %}
+              </a>
+              <small class="text-muted">{{ post.date_posted.strftime('%d %B %Y %H:%M') }}</small>
             </div>
-            <h2><a class="article-title" href="#">{{ post.title }}</a></h2>
+            <h2><a class="article-title" href="{{ url_for('post_page', post_id=post.id) }}">{{ post.title }}</a></h2>
             <p class="article-content">{{ post.content }}</p>
           </div>
         </article>

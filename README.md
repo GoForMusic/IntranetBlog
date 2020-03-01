@@ -8,7 +8,4 @@ user/post Group
 -login/register
 -update account
 -profile view/update
-
-//to do
-post system with delete/update/post
-22
+-post update/create/delete
