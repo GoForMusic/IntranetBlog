@@ -1,0 +1,2 @@
+# cgsblog
+CGS blog intranet
