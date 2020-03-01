@@ -1,4 +1,5 @@
-import secrets
+import secrets, random, string
+from datetime import datetime
 import os
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
@@ -7,8 +8,10 @@ from mainblog.forms import RegistrationForm, LoginForm, UpdateProgileForm, PostF
 from mainblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
+#random ID
+def id_generator(size=20, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
+    return ''.join(random.choice(chars) for _ in range(size))
 
-import mainblog.api.apicall
 
 #route with every functions
 @app.route("/")
@@ -30,7 +33,7 @@ def register_page():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(email=form.email.data, password=hashed_password)
+        user = User(id=id_generator(20),email=form.email.data, password=hashed_password)
         db.session.add(user)
         db.session.commit()
         flash(f'{ form.email.data }! was created', 'success')
@@ -100,7 +103,7 @@ def account_page():
 def new_post_page():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        post = Post(id=id_generator(20),title=form.title.data, content=form.content.data, author=current_user, date_posted=datetime.utcnow())
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
