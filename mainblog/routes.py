@@ -8,7 +8,7 @@ from mainblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
 
-
+import mainblog.api.apicall
 
 #route with every functions
 @app.route("/")
