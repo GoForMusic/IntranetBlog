@@ -8,6 +8,11 @@ from mainblog.forms import RegistrationForm, LoginForm, UpdateProgileForm, PostF
 from mainblog.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
+
+
+
+
+
 #random ID
 def id_generator(size=20, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
     return ''.join(random.choice(chars) for _ in range(size))
