@@ -1,6 +1,7 @@
 from mainblog import db, login_manager
 from flask_login import UserMixin
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
@@ -14,8 +15,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     firstname = db.Column(db.String(60), nullable=True, default='')
     lastname = db.Column(db.String(60), nullable=True, default='')
-    group = db.Column(db.String(60), nullable=True, default='CGS')
-    position = db.Column(db.String(60), nullable=True, default='operator')
+    group = db.relationship('Groups', backref='Members', lazy=True)
+    position = db.relationship('Position', backref='Members', lazy=True)
+    comments = db.relationship('Comments', backref='author', lazy=True)
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def __repr__(self):
@@ -24,6 +26,30 @@ class User(db.Model, UserMixin):
         else:
             return f"{self.firstname} {self.lastname}"
 
+
+class Groups(db.Model):
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    group_name = db.Column(db.String(20))
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=True)
+
+    def __repr__(self):
+        return f"{self.group_name}"
+
+class Position(db.Model):
+    id = db.Column(db.Integer, unique=True, primary_key=True)
+    position_name = db.Column(db.String(20))
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=True)
+    def __repr__(self):
+        return f"{self.position_name}"
+
+class Comments(db.Model):
+    id = db.Column(db.String(20), unique=True, primary_key=True)
+    date_posted = db.Column(db.DateTime, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"(ID: {self.id})"
 
 class Post(db.Model):
     id = db.Column(db.String(20), unique=True, primary_key=True)

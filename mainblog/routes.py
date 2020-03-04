@@ -5,7 +5,7 @@ from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from mainblog import app, db, bcrypt
 from mainblog.forms import RegistrationForm, LoginForm, UpdateProgileForm, PostForm
-from mainblog.models import User, Post
+from mainblog.models import User, Post, Comments, Groups, Position
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -22,7 +22,7 @@ def id_generator(size=20, chars=string.ascii_uppercase + string.digits + string.
 @app.route("/")
 @app.route("/home")
 def home_page():
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.date_posted.desc())
     return render_template('home.html', posts=posts)
 
 
