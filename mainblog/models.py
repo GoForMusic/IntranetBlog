@@ -19,7 +19,10 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.id}','{self.email}','{self.image_file}','{self.group}','{self.position}','{self.firstname}','{self.lastname}')"
+        if not self.firstname and not self.lastname:
+            return f"{self.email}"
+        else:
+            return f"{self.firstname} {self.lastname}"
 
 
 class Post(db.Model):
@@ -30,4 +33,4 @@ class Post(db.Model):
     user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Post('{self.id}','{self.title}','{self.date_posted}','{self.user_id}')"
+        return f"(ID: {self.id}) \n {self.title}"
