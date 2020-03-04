@@ -15,8 +15,8 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     firstname = db.Column(db.String(60), nullable=True, default='')
     lastname = db.Column(db.String(60), nullable=True, default='')
-    group = db.relationship('Groups', backref='Members', lazy=True)
-    position = db.relationship('Position', backref='Members', lazy=True)
+    group = db.Column(db.String(60), db.ForeignKey('groups.group_name'), nullable=True)
+    position = db.Column(db.String(60), db.ForeignKey('position.position_name'), nullable=True)
     comments = db.relationship('Comments', backref='author', lazy=True)
     posts = db.relationship('Post', backref='author', lazy=True)
 
@@ -29,16 +29,16 @@ class User(db.Model, UserMixin):
 
 class Groups(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    group_name = db.Column(db.String(20))
-    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=True)
+    group_name = db.Column(db.String(20), unique=True, nullable=False)
+    members = db.relationship('User', backref='Group members', lazy=True)
 
     def __repr__(self):
         return f"{self.group_name}"
 
 class Position(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    position_name = db.Column(db.String(20))
-    user_id = db.Column(db.String, db.ForeignKey('user.id'), nullable=True)
+    position_name = db.Column(db.String(20), unique=True, nullable=False)
+    members = db.relationship('User', backref='Position members', lazy=True)
     def __repr__(self):
         return f"{self.position_name}"
 
