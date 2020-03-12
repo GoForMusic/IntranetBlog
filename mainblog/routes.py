@@ -22,7 +22,8 @@ def id_generator(size=20, chars=string.ascii_uppercase + string.digits + string.
 @app.route("/")
 @app.route("/home")
 def home_page():
-    posts = Post.query.order_by(Post.date_posted.desc())
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page,per_page=5)
     return render_template('home.html', posts=posts)
 
 
