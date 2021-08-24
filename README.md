@@ -1,5 +1,5 @@
 # cgsblog
-CGS blog intranet
+blog intranet
 
 v 0.0.1 
 python flask WEB server - blog
